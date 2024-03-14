@@ -1,26 +1,21 @@
 #!/usr/bin/python3
-"""
-Solution to lockboxes problem
+"""Represents a  module for working with lockboxes.
 """
 
 
 def canUnlockAll(boxes):
+    """Checking if all the boxes in a list of boxes containing the keys
+    (indices) to other boxes can be unlocked given that the first
+    box is unlocked.
     """
-    Determines whether a series of locked boxes can be opened
-    based on keys that can be attained.
-    Solution to the lockboxes problem
-    """
-    if (type(boxes)) is not list:
-        return False
-    elif (len(boxes)) == 0:
-        return False
-
-    for k in range(1, len(boxes) - 1):
-        boxes_checked = False
-        for idx in range(len(boxes)):
-            boxes_checked = k in boxes[idx] and k != idx
-            if boxes_checked:
-                break
-        if boxes_checked is False:
-            return boxes_checked
-    return True
+    n = len(boxes)
+    seenBoxes = set([0])
+    unseenBoxes = set(boxes[0]).difference(set([0]))
+    while len(unseenBoxes) > 0:
+        boxIdx = unseenBoxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seenBoxes:
+            unseenBoxes = unseenBoxes.union(boxes[boxIdx])
+            seenBoxes.add(boxIdx)
+    return n == len(seenBoxes)
